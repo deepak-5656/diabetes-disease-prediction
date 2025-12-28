@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section with 3D Heart -->
+<div class="hero-container">
+    <div class="container-xl">
+        <div class="row align-items-center justify-content-between min-vh-100">
+            <!-- Left Content -->
+            <div class="col-lg-6 text-white mb-5 mb-lg-0">
+                <div class="hero-content">
+                    <h1 class="display-2 fw-bold mb-4">
+                        Diabetes Risk Prediction
+                    </h1>
+                    <p class="lead mb-5">
+                        AI-powered health assessment to detect diabetes risk early. Get personalized insights based on your health data.
+                    </p>
+                    
+                    <!-- Key Features -->
+                    <div class="features-grid mb-5">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle" style="color: #00BCD4;"></i>
+                            <span>Early Detection</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-brain" style="color: #00BCD4;"></i>
+                            <span>AI Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-clock" style="color: #00BCD4;"></i>
+                            <span>Instant Results</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-lock" style="color: #00BCD4;"></i>
+                            <span>Secure & Private</span>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <a href="/form" class="btn btn-lg btn-danger btn-cta">
+                        <i class="fas fa-stethoscope me-2"></i>Start Checkup
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Medical Symbol Animation -->
+            <div class="col-lg-6 text-center d-none d-lg-flex align-items-center justify-content-center">
+                <div class="heart-animation stethoscope-emoji">
+                    <div style="font-size: 300px; line-height: 1; animation: heartbeat 1.5s ease-in-out infinite;" class="heart-path">
+                        🩺
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Section -->
+<section class="py-5 about-section">
+    <div class="container-xl">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4">About Our Service</h2>
+                <p class="lead mb-3">
+                    We are committed to making early disease detection accessible to everyone through advanced AI technology.
+                </p>
+                <p class="mb-4">
+                    Our platform specializes in <strong>Early Lifestyle Disease Predictions</strong>, helping you identify health risks before they become serious conditions.
+                </p>
+                <div class="feature-list">
+                    <div class="feature-row mb-3">
+                        <i class="fas fa-star" style="color: #00BCD4; font-size: 1.2rem; margin-right: 1rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Diabetes Risk Assessment</h6>
+                            <p class="mb-0 text-muted">Predict diabetes risk based on lifestyle and health factors</p>
+                        </div>
+                    </div>
+                    <div class="feature-row mb-3">
+                        <i class="fas fa-star" style="color: #00BCD4; font-size: 1.2rem; margin-right: 1rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">AI-Powered Analysis</h6>
+                            <p class="mb-0 text-muted">Machine learning models trained on 223K+ health records</p>
+                        </div>
+                    </div>
+                    <div class="feature-row mb-3">
+                        <i class="fas fa-star" style="color: #00BCD4; font-size: 1.2rem; margin-right: 1rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Instant Results</h6>
+                            <p class="mb-0 text-muted">Get personalized risk assessment in seconds</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <i class="fas fa-star" style="color: #00BCD4; font-size: 1.2rem; margin-right: 1rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Privacy First</h6>
+                            <p class="mb-0 text-muted">Your health data is secure and never shared</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-image-box">
+                    <div class="about-content-box">
+                        <h4 class="text-white mb-3">Why Early Detection Matters?</h4>
+                        <p class="text-white mb-3">
+                            Detecting lifestyle diseases early can significantly improve health outcomes and quality of life.
+                        </p>
+                        <ul class="list-unstyled text-white">
+                            <li class="mb-2">✓ Prevent serious complications</li>
+                            <li class="mb-2">✓ Take preventive action early</li>
+                            <li class="mb-2">✓ Improve long-term health outcomes</li>
+                            <li class="mb-2">✓ Reduce healthcare costs</li>
+                            <li class="mb-2">✓ Make informed lifestyle decisions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

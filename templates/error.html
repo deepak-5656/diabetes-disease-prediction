@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <div class="row align-items-center min-vh-75">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <i class="fas fa-exclamation-circle" style="font-size: 60px; color: #E74C3C;"></i>
+                    <h2 class="card-title mt-4 fw-bold">Error</h2>
+                    <p class="card-text lead">{{ message }}</p>
+                    <a href="/" class="btn btn-primary btn-lg mt-4">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

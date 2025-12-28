@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card shadow-sm p-4">
+  <h1 class="h3 mb-3">Risk Assessment Summary</h1>
+  <div class="row g-3 mb-4">
+    {% for name, value in inputs.items() %}
+    <div class="col-md-4">
+      <p class="small text-uppercase text-muted mb-1">{{ name }}</p>
+      <p class="fw-semibold">{{ value }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="row g-3">
+    {% for target, label in zip(targets, labels) %}
+    <div class="col-md-4">
+      <div class="risk-card {{ label|lower }}">
+        <h2 class="h5">{{ target.replace('Risk', '') }} Risk</h2>
+        <p class="display-6">{{ label }}</p>
+        <p class="text-muted">Confidence: {{ (probabilities[target] * 100) | round(1) }}%</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="mt-4">
+    <a href="/" class="btn btn-outline-primary">Assess Another Individual</a>
+  </div>
+</section>
+{% endblock %}

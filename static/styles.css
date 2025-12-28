@@ -1,0 +1,23 @@
+:root {
+  --risk-low: #1b998b;
+  --risk-high: #d7263d;
+}
+
+body {
+  background-color: #f7f9fb;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.risk-card {
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  color: #fff;
+}
+
+.risk-card.low {
+  background: var(--risk-low);
+}
+
+.risk-card.high {
+  background: var(--risk-high);
+}

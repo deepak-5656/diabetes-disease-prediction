@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container-xl">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4 text-white">
+                    <i class="fas fa-check-circle text-success me-3"></i>Diabetes Risk Assessment
+                </h1>
+                <p class="lead text-light mb-4">
+                    Get an instant AI-powered analysis of your diabetes risk based on health metrics and lifestyle factors.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#prediction-form" class="btn btn-lg btn-success">
+                        <i class="fas fa-arrow-down me-2"></i>Start Assessment
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="fas fa-stethoscope" style="font-size: 120px; color: rgba(255,255,255,0.1);"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section id="prediction-form" class="py-5">
+    <div class="container-xl">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-lg border-0 prediction-card">
+                    <div class="card-header bg-gradient py-4">
+                        <h3 class="mb-0">
+                            <i class="fas fa-clipboard-list me-2"></i>Patient Health Information
+                        </h3>
+                    </div>
+                    
+                    <div class="card-body p-5">
+                        <form id="predictionForm">
+                            <!-- Personal Information Section -->
+                            <div class="section-header mb-4">
+                                <h5 class="fw-bold text-secondary">
+                                    <i class="fas fa-user me-2 text-info"></i>Personal Information
+                                </h5>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                {% for field in form_fields.personal %}
+                                <div class="col-md-12">
+                                    <label class="form-label fw-semibold" for="{{ field.name }}">
+                                        {{ field.label }}
+                                        {% if field.unit %}<span class="text-muted">({{ field.unit }})</span>{% endif %}
+                                        {% if field.required %}<span class="text-danger">*</span>{% endif %}
+                                    </label>
+                                    {% if field.type == 'text' %}
+                                    <input 
+                                        type="{{ field.type }}"
+                                        class="form-control form-control-lg"
+                                        id="{{ field.name }}"
+                                        name="{{ field.name }}"
+                                        placeholder="{{ field.placeholder }}"
+                                        {% if field.required %}required{% endif %}
+                                    >
+                                    {% elif field.type == 'number' %}
+                                    <input 
+                                        type="number"
+                                        class="form-control form-control-lg"
+                                        id="{{ field.name }}"
+                                        name="{{ field.name }}"
+                                        min="{{ field.min }}"
+                                        max="{{ field.max }}"
+                                        step="{{ field.step }}"
+                                        placeholder="{{ field.placeholder }}"
+                                        {% if field.required %}required{% endif %}
+                                    >
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Health Metrics Section -->
+                            <div class="section-header mb-4">
+                                <h5 class="fw-bold text-secondary">
+                                    <i class="fas fa-heartbeat me-2 text-danger"></i>Vital Signs & Health Metrics
+                                </h5>
+                            </div>
+
+                            <!-- Blood Pressure and BMI -->
+                            <div class="row g-3 mb-4">
+                                {% if form_fields.vital_signs %}
+                                    {% for field in form_fields.vital_signs %}
+                                    <div class="col-md-{% if field.type == 'number' %}6{% else %}12{% endif %}">
+                                        <label class="form-label fw-semibold" for="{{ field.name }}">
+                                            {{ field.label }}
+                                            {% if field.unit %}<span class="text-muted">({{ field.unit }})</span>{% endif %}
+                                            {% if field.info %}<br><small class="text-muted">{{ field.info }}</small>{% endif %}
+                                        </label>
+                                        {% if field.type == 'number' %}
+                                        <div class="input-group">
+                                            <input type="number" 
+                                                   class="form-control form-control-lg" 
+                                                   id="{{ field.name }}" 
+                                                   name="{{ field.name }}"
+                                                   min="{{ field.min }}" 
+                                                   max="{{ field.max }}" 
+                                                   step="{{ field.step }}"
+                                                   placeholder="{{ field.placeholder }}"
+                                                   required>
+                                        </div>
+                                        {% elif field.type == 'select' %}
+                                        <select class="form-select form-select-lg" 
+                                                id="{{ field.name }}" 
+                                                name="{{ field.name }}"
+                                                required>
+                                            <option value="">{{ field.placeholder }}</option>
+                                            {% if field.options is iterable and field.options is not string %}
+                                                {% for option in field.options %}
+                                                    {% if option is mapping %}
+                                                        <option value="{{ option.value }}">{{ option.label }}</option>
+                                                    {% else %}
+                                                        <option value="{{ option }}">{{ option }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+                            <!-- Lifestyle Section -->
+                            <div class="section-header mb-4">
+                                <h5 class="fw-bold text-secondary">
+                                    <i class="fas fa-leaf me-2 text-success"></i>Lifestyle & Health Habits
+                                </h5>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                                {% for field in form_fields.categorical %}
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" for="{{ field.name }}">
+                                        {{ field.label }}
+                                    </label>
+                                    <select class="form-select form-select-lg" 
+                                            id="{{ field.name }}" 
+                                            name="{{ field.name }}"
+                                            required>
+                                        <option value="">{{ field.placeholder }}</option>
+                                        {% if field.options is iterable and field.options is not string %}
+                                            {% for option in field.options %}
+                                                {% if option is mapping %}
+                                                    <option value="{{ option.value }}">{{ option.label }}</option>
+                                                {% else %}
+                                                    <option value="{{ option }}">{{ option }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid gap-2 mt-5">
+                                <button type="submit" class="btn btn-lg btn-primary btn-submit">
+                                    <i class="fas fa-magic me-2"></i>Analyze Risk
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Results Modal -->
+<div class="modal fade" id="resultsModal" tabindex="-1" backdrop="static" keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-header bg-gradient border-0 py-4">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-chart-pie me-2"></i>Risk Assessment Results
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-5">
+                <div id="resultsContent">
+                    <!-- Results will be inserted here -->
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">New Assessment</button>
+                <button type="button" class="btn btn-primary" id="downloadPdfBtn">
+                    <i class="fas fa-download me-2"></i>Download PDF Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const riskLevels = {{ risk_levels | tojson }};
+
+document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    // Convert to appropriate types
+    data.BMI = parseFloat(data.BMI);
+    data.GenHlth = parseInt(data.GenHlth);
+    data.HighChol = parseInt(data.HighChol);
+    data.Smoker = parseInt(data.Smoker);
+    data.PhysActivity = parseInt(data.PhysActivity);
+    data.Fruits = parseInt(data.Fruits);
+    data.Veggies = parseInt(data.Veggies);
+    
+    // Convert blood pressure readings to HighBP binary (1 if high, 0 if normal)
+    // High BP is typically >= 140/90 mmHg
+    const systolic = parseInt(data.SystolicBP || 120);
+    const diastolic = parseInt(data.DiastolicBP || 80);
+    data.HighBP = (systolic >= 140 || diastolic >= 90) ? 1 : 0;
+
+    try {
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            displayResults(result);
+            new bootstrap.Modal(document.getElementById('resultsModal')).show();
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+function displayResults(result) {
+    const diabetesInfo = result.diabetes;
+    const obesityInfo = result.obesity;
+    
+    const resultsHtml = `
+        <!-- Diabetes Risk Assessment with Progress Bar -->
+        <div class="risk-result" style="background: linear-gradient(135deg, ${diabetesInfo.color}20, ${diabetesInfo.color}40); border-left: 5px solid ${diabetesInfo.color}; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <div class="text-center mb-3">
+                <i class="fas fa-heartbeat" style="font-size: 40px; color: ${diabetesInfo.color};"></i>
+            </div>
+            <h4 class="text-center fw-bold mb-2" style="color: ${diabetesInfo.color};">
+                Diabetes Risk: ${diabetesInfo.label}
+            </h4>
+            <div class="text-center mb-3">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar" role="progressbar" style="width: ${diabetesInfo.risk_score}%; background-color: ${diabetesInfo.color};">
+                        ${diabetesInfo.risk_score}%
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-muted mb-0">Risk Score (0% = No Risk, 100% = High Risk)</p>
+        </div>
+
+        <!-- Obesity Risk Assessment - Based on Model Prediction -->
+        <div style="background: linear-gradient(135deg, ${obesityInfo.color}15, ${obesityInfo.color}30); border: 2px solid ${obesityInfo.color}; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <div class="mb-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="fas fa-weight" style="font-size: 30px; color: ${obesityInfo.color};"></i>
+                    <h5 class="mb-0 fw-bold" style="color: ${obesityInfo.color};">Obesity Risk Assessment</h5>
+                </div>
+                <p class="mb-1" style="font-size: 14px; color: #666;">Status: <strong style="color: ${obesityInfo.color};">${obesityInfo.status || obesityInfo.label}</strong></p>
+            </div>
+            <hr style="margin: 12px 0; border-color: ${obesityInfo.color}40;">
+            <p class="mb-2" style="font-size: 13px;"><strong>Interpretation:</strong> ${obesityInfo.interpretation || 'Your weight status based on BMI calculation.'}</p>
+            <p class="mb-0" style="font-size: 13px;"><strong>Advice:</strong> ${obesityInfo.advice || 'Maintain a healthy diet and exercise regularly.'}</p>
+        </div>
+
+        <div class="input-summary mt-4">
+            <h6 class="fw-bold mb-3">Patient Information Summary:</h6>
+            <div class="row g-2">
+                <div class="col-6">
+                    <small class="text-muted">Full Name:</small>
+                    <p class="fw-semibold">${result.full_name}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Age:</small>
+                    <p class="fw-semibold">${result.age || 'N/A'} years</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Blood Pressure:</small>
+                    <p class="fw-semibold">${result.systolic_bp || 'N/A'}/${result.diastolic_bp || 'N/A'} mmHg</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">BMI:</small>
+                    <p class="fw-semibold">${result.inputs.BMI}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">High Cholesterol:</small>
+                    <p class="fw-semibold">${result.inputs.HighChol === 1 ? 'Yes' : 'No'}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">General Health:</small>
+                    <p class="fw-semibold">${['Excellent', 'Very Good', 'Good', 'Fair', 'Poor'][result.inputs.GenHlth - 1] || 'N/A'}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Currently Smoking:</small>
+                    <p class="fw-semibold">${result.inputs.Smoker === 1 ? 'Yes' : 'No'}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Physical Activity:</small>
+                    <p class="fw-semibold">${result.inputs.PhysActivity === 1 ? 'Yes' : 'No'}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Consume Fruits:</small>
+                    <p class="fw-semibold">${result.inputs.Fruits === 1 ? 'Yes' : 'No'}</p>
+                </div>
+                <div class="col-6">
+                    <small class="text-muted">Consume Vegetables:</small>
+                    <p class="fw-semibold">${result.inputs.Veggies === 1 ? 'Yes' : 'No'}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert alert-info mt-4 mb-0">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Note:</strong> This assessment is based on AI prediction and should not replace professional medical consultation.
+        </div>
+    `;
+    
+    document.getElementById('resultsContent').innerHTML = resultsHtml;
+    
+    // Store result data for PDF generation
+    window.lastPredictionResult = result;
+}
+
+// PDF Download functionality
+document.getElementById('downloadPdfBtn').addEventListener('click', async function() {
+    if (!window.lastPredictionResult) {
+        alert('No prediction data available');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/generate-pdf', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(window.lastPredictionResult)
+        });
+        
+        if (!response.ok) {
+            throw new Error('PDF generation failed');
+        }
+        
+        // Get the PDF blob
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Diabetes_Assessment_${window.lastPredictionResult.full_name.replace(/ /g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        alert('Error generating PDF: ' + error.message);
+    }
+});
+</script>
+{% endblock %}
+
