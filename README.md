@@ -129,7 +129,6 @@ pytest tests/
 ## Future Enhancements
 
 - Integrate additional medical features
-- Add interpretability using SHAP or LIME
 - Implement user accounts and historical predictions
 - Export predictions as PDF reports
 - Deploy with Docker for easy scaling
